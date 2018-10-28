@@ -95,12 +95,8 @@ func LoggerMiddlerware(l *logrus.Logger) gin.HandlerFunc {
 	}
 	return func(c *gin.Context) {
 		t := time.Now()
-		requestId, err := uuid.NewV4()
-		if err != nil {
-			l.Errorf("Generate request id got error => %v", err)
-		}
 		loggerWithCtx := l.WithTime(t).WithFields(logrus.Fields{
-			"RequestId":     requestId,
+			"RequestId":     uuid.NewV4(),
 			"RequestIp":     c.ClientIP(),
 			"RequestMethod": c.Request.Method,
 			"RequestURI":    c.Request.RequestURI,
