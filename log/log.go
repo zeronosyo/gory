@@ -23,7 +23,7 @@ func InitLogger() *logrus.Logger {
 	})
 	if gin.Mode() == gin.ReleaseMode {
 		logger.SetLevel(logrus.InfoLevel)
-		writer, err := syslog.New(syslog.LOG_EMERG, "gory")
+		writer, err := syslog.New(syslog.LOG_LOCAL6, "gory")
 		if err != nil {
 			logger.Fatalf("Init logger got error => %v", err)
 		}
