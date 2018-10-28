@@ -64,6 +64,8 @@ func LoadEnv() *Env {
  **********/
 
 type GoryFormatter struct {
+	pn  string
+	pid int
 }
 
 func (f *GoryFormatter) Format(entry *logrus.Entry) ([]byte, error) {
@@ -73,8 +75,8 @@ func (f *GoryFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 		"%v %v %v[%v]:",
 		entry.Time.Format(time.RFC3339),
 		entry.Level,
-		filepath.Base(os.Args[0]),
-		os.Getpid(),
+		f.pn,
+		f.pid,
 	))
 	// [RequestIp - StatusCode Method Path RequestId]
 	reqInfo := make([]string, 0)
@@ -113,7 +115,10 @@ func (f *GoryFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 func InitLogger() {
 	logger = logrus.New()
-	logger.SetFormatter(new(GoryFormatter))
+	logger.SetFormatter(&GoryFormatter{
+		pn:  filepath.Base(os.Args[0]),
+		pid: os.Getpid(),
+	})
 	if gin.Mode() == gin.ReleaseMode {
 		logger.SetLevel(logrus.InfoLevel)
 		writer, err := syslog.New(syslog.LOG_EMERG, "gory")
