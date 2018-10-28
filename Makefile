@@ -33,6 +33,6 @@ clean:
 	rm -rf ./gory-prod
 	go clean
 
-test: deps build-dev build-prod
+test: deps lint build-dev build-prod
 
 .PHONY: build-prod build-dev lint clean deps
